@@ -1,4 +1,8 @@
+![Note]
+This fork was only created because the original library is no longer maintained and to add support for responses that contain both data & errors. See https://github.com/mghoneimy/php-graphql-client/pull/70 https://github.com/mghoneimy/php-graphql-client/pull/71
+
 # PHP GraphQL Client
+
 ![Build Status](https://github.com/mghoneimy/php-graphql-client/actions/workflows/php.yml/badge.svg)
 [![Total
 Downloads](https://poser.pugx.org/gmostafa/php-graphql-client/downloads)](https://packagist.org/packages/gmostafa/php-graphql-client)
@@ -29,14 +33,13 @@ There are 3 primary ways to use this package to generate your GraphQL queries:
 Run the following command to install the package using composer:
 
 ```
-$ composer require gmostafa/php-graphql-client
+$ composer require brandonbeeler/php-graphql-client
 ```
 
 # Object-to-Query-Mapper Extension
 
 To avoid the hassle of having to write _any_ queries and just interact with PHP
-objects generated from your API schema visit [PHP GraphQL OQM repository](
-https://github.com/mghoneimy/php-graphql-oqm)
+objects generated from your API schema visit [PHP GraphQL OQM repository](https://github.com/mghoneimy/php-graphql-oqm)
 
 # Query Examples
 
@@ -84,8 +87,8 @@ The full form shouldn't be used unless the query can't be represented in the
 shorthand form, which has only one case, when we want to run multiple queries
 in the same object.
 
-
 ## Multiple Queries
+
 ```php
 $gql = (new Query())
     ->setSelectionSet(
@@ -116,6 +119,7 @@ Writing multiple queries requires writing the query object in the full form
 to represent each query as a subfield under the parent query object.
 
 ## Nested Queries
+
 ```php
 $gql = (new Query('companies'))
     ->setSelectionSet(
@@ -190,7 +194,7 @@ $gql = (new Query('companies'))
 This query is another special case of the arguments query. In this example,
 we're setting a custom input object "filter" with some values to limit the
 companies being returned. We're setting the filter "name_starts_with" with
-value "Face".  This query will retrieve only the companies whose names
+value "Face". This query will retrieve only the companies whose names
 start with the phrase "Face".
 
 The RawObject class being constructed is used for injecting the string into the
@@ -228,12 +232,13 @@ standards. Its constructor receives 4 arguments:
 - name: Represents the variable name
 - type: Represents the variable type according to the GraphQL server schema
 - isRequired (Optional): Represents if the variable is required or not, it's
-false by default
+  false by default
 - defaultValue (Optional): Represents the default value to be assigned to the
-variable. The default value will only be considered
-if the isRequired argument is set to false.
+  variable. The default value will only be considered
+  if the isRequired argument is set to false.
 
 ## Using an alias
+
 ```php
 $gql = (new Query())
     ->setSelectionSet(
@@ -366,7 +371,7 @@ companies starting with a name prefix and returns the company with the
 # Constructing The Client
 
 A Client object can easily be instantiated by providing the GraphQL endpoint
-URL. 
+URL.
 
 The Client constructor also receives an optional "authorizationHeaders"
 array, which can be used to add authorization headers to all requests being sent
@@ -381,7 +386,6 @@ $client = new Client(
 );
 ```
 
-
 The Client constructor also receives an optional "httpOptions" array, which
 **overrides** the "authorizationHeaders" and can be used to add custom
 [Guzzle HTTP Client request options](https://guzzle.readthedocs.io/en/latest/request-options.html).
@@ -392,7 +396,7 @@ Example:
 $client = new Client(
     'http://api.graphql.com',
     [],
-    [ 
+    [
         'connect_timeout' => 5,
         'timeout' => 5,
         'headers' => [
@@ -409,7 +413,6 @@ $client = new Client(
     ]
 );
 ```
-
 
 It is possible to use your own preconfigured HTTP client that implements the [PSR-18 interface](https://www.php-fig.org/psr/psr-18/).
 
@@ -435,6 +438,7 @@ structure:
 $results = $client->runQuery($gql);
 $results->getData()->companies[0]->branches;
 ```
+
 Or getting results in array structure:
 
 ```php
