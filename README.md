@@ -1,5 +1,5 @@
-![Note]
-This fork was only created because the original library is no longer maintained and to add support for responses that contain both data & errors. See https://github.com/mghoneimy/php-graphql-client/pull/70 https://github.com/mghoneimy/php-graphql-client/pull/71
+> [!IMPORTANT]
+> This fork was only created because the original library is no longer maintained and to add support for responses that contain both data & errors. See https://github.com/mghoneimy/php-graphql-client/pull/70 https://github.com/mghoneimy/php-graphql-client/pull/71
 
 # PHP GraphQL Client
 
