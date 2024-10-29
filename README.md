@@ -30,10 +30,18 @@ There are 3 primary ways to use this package to generate your GraphQL queries:
 
 # Installation
 
-Run the following command to install the package using composer:
+The following items should be in the corresponding sections of the composer.json in order to use this fork:
 
 ```
-$ composer require brandonbeeler/php-graphql-client
+"require": {
+    "brandonbeeler/php-graphql-client": "dev-master",
+},
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/brandonbeeler/php-graphql-client"
+    }
+]
 ```
 
 # Object-to-Query-Mapper Extension
