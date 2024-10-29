@@ -50,7 +50,7 @@ class Results
         if ($containsErrors) {
 
             // Reformat results to an array and use it to initialize exception object
-            $this->reformatResults(true);
+            $this->reformatResults($asArray);
             throw new QueryError($this->results);
         }
     }

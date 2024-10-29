@@ -14,11 +14,11 @@ use RuntimeException;
 class QueryError extends RuntimeException
 {
     /**
-     * @var array
+     * @var array|object
      */
     protected $errorDetails;
     /**
-     * @var array
+     * @var array|object
      */
     protected $data;
     /**
@@ -29,21 +29,23 @@ class QueryError extends RuntimeException
     /**
      * QueryError constructor.
      *
-     * @param array $errorDetails
+     * @param array|object $errorDetails
      */
-    public function __construct($errorDetails)
+    public function __construct($errorDetails, $asArray = false)
     {
-        $this->errorDetails = $errorDetails['errors'][0];
         $this->data = [];
-        if (!empty($errorDetails['data'])) {
+        if ($asArray && !empty($errorDetails['data'])) {
             $this->data = $errorDetails['data'];
+        } else if (!$asArray && !empty($errorDetails->data)) {
+            $this->data = $errorDetails->data;
         }
-        $this->errors = $errorDetails['errors'];
-        parent::__construct($this->errorDetails['message']);
+        $this->errors = $asArray ? $errorDetails['errors'] : $errorDetails->errors;
+        $this->errorDetails = $this->errors[0];
+        parent::__construct($asArray ? $this->errorDetails['message'] : $this->errorDetails->message);
     }
 
     /**
-     * @return array
+     * @return array|object
      */
     public function getErrorDetails()
     {
@@ -51,7 +53,7 @@ class QueryError extends RuntimeException
     }
 
     /**
-     * @return array
+     * @return array|object
      */
     public function getData()
     {

@@ -33,7 +33,7 @@ class QueryErrorTest extends TestCase
             ]
         ];
 
-        $queryError = new QueryError($errorData);
+        $queryError = new QueryError($errorData, true);
         $this->assertEquals($exceptionMessage, $queryError->getMessage());
         $this->assertEquals(
             [
@@ -89,7 +89,7 @@ class QueryErrorTest extends TestCase
             ]
         ];
 
-        $queryError = new QueryError($errorData);
+        $queryError = new QueryError($errorData, true);
         $this->assertEquals('first error message', $queryError->getMessage());
         $this->assertEquals(
             [
@@ -140,6 +140,97 @@ class QueryErrorTest extends TestCase
                 ]
             ],
             $queryError->getData()
+        );
+    }
+
+    /**
+     * @covers \GraphQL\Exception\QueryError::__construct
+     * @covers \GraphQL\Exception\QueryError::getErrorDetails
+     */
+    public function testConstructQueryErrorWhenResponseHasDataAsObject()
+    {
+        $errorData = json_decode(json_encode([
+            'errors' => [
+                [
+                    'message' => 'first error message',
+                    'location' => [
+                        [
+                            'line' => 1,
+                            'column' => 3,
+                        ]
+                    ],
+                ],
+                [
+                    'message' => 'second error message',
+                    'location' => [
+                        [
+                            'line' => 2,
+                            'column' => 4,
+                        ]
+                    ],
+                ],
+            ],
+            'data' => [
+                'someField' => [
+                    [
+                        'data' => 'value',
+                    ],
+                    [
+                        'data' => 'value',
+                    ]
+                ]
+            ]
+        ]), false);
+
+        $queryError = new QueryError($errorData, false);
+        $this->assertEquals('first error message', $queryError->getMessage());
+        $this->assertEquals(
+            json_decode(json_encode([
+                'message' => 'first error message',
+                'location' => [
+                    [
+                        'line' => 1,
+                        'column' => 3,
+                    ]
+                ]
+            ]), false),
+            $queryError->getErrorDetails()
+        );
+
+        $this->assertEquals(
+            json_decode(json_encode([
+                [
+                    'message' => 'first error message',
+                    'location' => [
+                        [
+                            'line' => 1,
+                            'column' => 3,
+                        ]
+                    ]
+                ],
+                [
+                    'message' => 'second error message',
+                    'location' => [
+                        [
+                            'line' => 2,
+                            'column' => 4,
+                        ]
+                    ]
+                ]
+            ]), false),
+            $queryError->getErrors()
+        );
+
+        $this->assertEquals(
+            json_decode(json_encode([
+                [
+                    'data' => 'value',
+                ],
+                [
+                    'data' => 'value',
+                ]
+            ]), false),
+            $queryError->getData()->someField
         );
     }
 }
