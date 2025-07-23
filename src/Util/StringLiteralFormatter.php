@@ -62,12 +62,20 @@ class StringLiteralFormatter
     {
         $arrString = '[';
         $first = true;
-        foreach ($array as $element) {
+        foreach ($array as $key => $element) {
             if ($first) {
                 $first = false;
             } else {
                 $arrString .= ', ';
             }
+
+            // Recursively format nested arrays
+            if (is_array($element)) {
+                $element = static::formatArrayForGQLQuery($element);
+                $arrString .= $element;
+                continue;
+            }
+
             $arrString .= StringLiteralFormatter::formatValueForRHS($element);
         }
         $arrString .= ']';
