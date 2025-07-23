@@ -217,9 +217,23 @@ class Query extends NestableObject
             if (is_scalar($value) || $value === null) {
                 // Convert scalar value to its literal in graphql
                 $value = StringLiteralFormatter::formatValueForRHS($value);
-            } elseif (is_array($value)) {
+            } elseif (is_array($value) && array_is_list($value)) {
                 // Convert PHP array to its array representation in graphql arguments
                 $value = StringLiteralFormatter::formatArrayForGQLQuery($value);
+            } elseif (is_array($value) && !array_is_list($value)) {
+                // Convert associative array to its object representation in graphql arguments
+                $elementString = '{ ';
+                foreach ($value as $key => $element) {
+                    $elementString .= $key . ': ';
+                    // Convert scalar value to its literal in graphql
+                    if (is_array($element)) {
+                        $elementString .= StringLiteralFormatter::formatArrayForGQLQuery($element);
+                    } else {
+                        $elementString .= StringLiteralFormatter::formatValueForRHS($element);
+                    }
+                }
+                $elementString .= ' }';
+                $value = $elementString;
             }
             // TODO: Handle cases where a non-string-convertible object is added to the arguments
             $constraintsString .= $name . ': ' . $value;
