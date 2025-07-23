@@ -16,7 +16,7 @@ class StringLiteralFormatter
      *
      * @return string
      */
-    public static function formatValueForRHS($value): string|float
+    public static function formatValueForRHS($value): string|float|int
     {
         if (is_string($value)) {
             if (!static::isVariable($value)) {
@@ -35,7 +35,7 @@ class StringLiteralFormatter
             }
         } elseif ($value === null) {
             $value = 'null';
-        } elseif (is_float($value)) {
+        } elseif (is_numeric($value)) {
             // Numeric values are already in the correct format
         } else {
             $value = (string) $value;
