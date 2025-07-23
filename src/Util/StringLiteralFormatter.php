@@ -2,6 +2,8 @@
 
 namespace GraphQL\Util;
 
+use GraphQL\Enum;
+
 /**
  * Class StringLiteralFormatter
  *
@@ -18,6 +20,10 @@ class StringLiteralFormatter
      */
     public static function formatValueForRHS($value): string|float|int
     {
+        if ($value instanceof Enum) {
+            return (string) $value;
+        }
+
         if (is_string($value)) {
             if (!static::isVariable($value)) {
                 $value = str_replace('"', '\"', $value);

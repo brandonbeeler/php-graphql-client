@@ -192,6 +192,55 @@ class Query extends NestableObject
     }
 
     /**
+     * Recursively formats a value for GraphQL arguments
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatArgumentValue($value): string
+    {
+        if (is_scalar($value) || $value === null) {
+            // Convert scalar value to its literal in graphql
+            return StringLiteralFormatter::formatValueForRHS($value);
+        } elseif (is_array($value) && array_is_list($value)) {
+            // Convert PHP array to its array representation in graphql arguments
+            return StringLiteralFormatter::formatArrayForGQLQuery($value);
+        } elseif (is_array($value) && !array_is_list($value)) {
+            // Convert associative array to its object representation in graphql arguments
+            return $this->formatAssociativeArray($value);
+        }
+
+        // TODO: Handle cases where a non-string-convertible object is added to the arguments
+        return (string) $value;
+    }
+
+    /**
+     * Recursively formats an associative array as a GraphQL object
+     *
+     * @param array $array
+     * @return string
+     */
+    protected function formatAssociativeArray(array $array): string
+    {
+        $elementString = '{ ';
+        $first = true;
+
+        foreach ($array as $key => $element) {
+            if ($first) {
+                $first = false;
+            } else {
+                $elementString .= ', ';
+            }
+
+            $elementString .= $key . ': ';
+            $elementString .= $this->formatArgumentValue($element);
+        }
+
+        $elementString .= ' }';
+        return $elementString;
+    }
+
+    /**
      * @return string
      */
     protected function constructArguments(): string
@@ -213,29 +262,8 @@ class Query extends NestableObject
                 $constraintsString .= ' ';
             }
 
-            // Convert argument values to graphql string literal equivalent
-            if (is_scalar($value) || $value === null) {
-                // Convert scalar value to its literal in graphql
-                $value = StringLiteralFormatter::formatValueForRHS($value);
-            } elseif (is_array($value) && array_is_list($value)) {
-                // Convert PHP array to its array representation in graphql arguments
-                $value = StringLiteralFormatter::formatArrayForGQLQuery($value);
-            } elseif (is_array($value) && !array_is_list($value)) {
-                // Convert associative array to its object representation in graphql arguments
-                $elementString = '{ ';
-                foreach ($value as $key => $element) {
-                    $elementString .= $key . ': ';
-                    // Convert scalar value to its literal in graphql
-                    if (is_array($element)) {
-                        $elementString .= StringLiteralFormatter::formatArrayForGQLQuery($element);
-                    } else {
-                        $elementString .= StringLiteralFormatter::formatValueForRHS($element);
-                    }
-                }
-                $elementString .= ' }';
-                $value = $elementString;
-            }
-            // TODO: Handle cases where a non-string-convertible object is added to the arguments
+            // Convert argument values to graphql string literal equivalent recursively
+            $value = $this->formatArgumentValue($value);
             $constraintsString .= $name . ': ' . $value;
         }
         $constraintsString .= ')';
