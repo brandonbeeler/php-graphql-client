@@ -6,7 +6,24 @@ between each release.
 ## Tech Debt
 
 - Refactor the query conversion to string to separate the process of
-constructing a new query and adding a nested subfield
+  constructing a new query and adding a nested subfield
+
+# Post-Fork Changelog
+
+## 2.0.2
+
+- Add `Enum::array()` helper for bulk construction of enums
+
+## 2.0.1
+
+- Add Enum Support
+- Handle recursive array arguments
+
+## 2.0
+
+- Add support for still showing data when errors are present in a query response
+
+# Pre-Fork Changelog
 
 ## Unreleased
 
@@ -105,23 +122,21 @@ constructing a new query and adding a nested subfield
 
 - Mutation class for running mutation operations
 - Examples in the README for running
-    - Mutation operation
-    - Raw string queries
+  - Mutation operation
+  - Raw string queries
 - New badges to README to show downloads count, license, and latest version
 - Changelog
 
 ### Changed
 
 - `Client::runQuery` method now accepts `QueryBuilderInterface` as well as
-`Query`
-
+  `Query`
 
 ## 1.0: 2019-04-19
 
 ### Removed
 
 - Moved all schema generation logic to a separate repository
-
 
 ## 0.6: 2019-04-09
 
@@ -135,17 +150,15 @@ constructing a new query and adding a nested subfield
 ### Changed
 
 - Refactored schema class generation mechanism to traverse the API schema from
-the root queryType
+  the root queryType
 - Refactored QueryObject class to accommodate changes in the schema generation
-    - Removed arguments from QueryObject classes and moved them to
+  - Removed arguments from QueryObject classes and moved them to
     ArgumentsObjects
-    - Modified how generation works to accommodate ArgumentsObjects nested
+  - Modified how generation works to accommodate ArgumentsObjects nested
     within QueryObjects
-    - Added ArgumentsObject argument to all field selector methods
+  - Added ArgumentsObject argument to all field selector methods
 - Refactored Query class
-    - Added the ability to set Query object name to 'query'
-
-
+  - Added the ability to set Query object name to 'query'
 
 ## 0.5: 2019-03-25
 
@@ -166,7 +179,6 @@ the root queryType
 
 - composer.lock from version control
 
-
 ## 0.4: 2019-03-25
 
 ### Added
@@ -181,13 +193,11 @@ the root queryType
 
 - Upgraded to PHP7 (7.2 minimum version)
 
-
 ## 0.3.4: 2019-03-02
 
 ### Fixed
 
 - Issue in README examples
-
 
 ## 0.3.3: 2019-03-02
 
@@ -195,20 +205,17 @@ the root queryType
 
 - Issue in package root directory name
 
-
 ## 0.3.2: 2019-03-02
 
 ### Fixed:
 
 - Autoload issue in schema classes generation
 
-
 ## 0.3.1: 2019-03-02
 
 ### Fixed:
 
 - Issue in input object generation
-
 
 ## 0.3: 2019-03-02
 
@@ -217,7 +224,6 @@ the root queryType
 - Generation of filters and arguments depending on type
 - Input object setters for input object arguments
 
-
 ## 0.2: 2019-02-16
 
 ### Added
@@ -225,7 +231,6 @@ the root queryType
 - Auto schema generation using GraphQL inspection ability
 - Throw QueryError if syntax errors are detected by the GraphQL server
 - Unit tests to cover basic functionality
-
 
 ## 0.1.4: 2019-01-18
 
@@ -238,13 +243,11 @@ the root queryType
 
 - String values do not get wrapped in quotations in the arguments construction
 
-
 ## 0.1.3: 2018-10-10
 
 ### Fixed
 
 - Fixed issue in generating query when no arguments are provided
-
 
 ## 0.1.2: 2018-10-07
 
@@ -254,11 +257,9 @@ the root queryType
 
 ## 0.1.1: 2018-10-07
 
-
 ### Changed
 
 - Upgrade Guzzle from 5.x to 6.x
-
 
 ## 0.1: 2018-10-07
 
