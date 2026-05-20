@@ -79,7 +79,9 @@ class StringLiteralFormatter
 
             // Recursively format nested arrays
             if (is_array($element)) {
-                $element = static::formatArrayForGQLQuery($element);
+                $element = array_is_list($element)
+                    ? static::formatArrayForGQLQuery($element)
+                    : static::formatObjectForGQLQuery($element);
                 $arrString .= $element;
                 continue;
             }
@@ -89,6 +91,34 @@ class StringLiteralFormatter
         $arrString .= ']';
 
         return $arrString;
+    }
+
+    /**
+     * @param array $array
+     *
+     * @return string
+     */
+    public static function formatObjectForGQLQuery(array $array): string
+    {
+        $objString = '{ ';
+        $first = true;
+        foreach ($array as $key => $element) {
+            if ($first) {
+                $first = false;
+            } else {
+                $objString .= ', ';
+            }
+            $objString .= $key . ': ';
+            if (is_array($element)) {
+                $objString .= array_is_list($element)
+                    ? static::formatArrayForGQLQuery($element)
+                    : static::formatObjectForGQLQuery($element);
+            } else {
+                $objString .= static::formatValueForRHS($element);
+            }
+        }
+        $objString .= ' }';
+        return $objString;
     }
 
     /**

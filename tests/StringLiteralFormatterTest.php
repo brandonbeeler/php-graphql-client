@@ -90,6 +90,41 @@ class StringLiteralFormatterTest extends TestCase
         $floatArray = [1.1, 2.2];
         $stringArray = StringLiteralFormatter::formatArrayForGQLQuery($floatArray);
         $this->assertEquals('[1.1, 2.2]', $stringArray);
+
+        // List of input objects — associative arrays nested inside a list must serialize as objects
+        $listOfObjects = [
+            ['field' => 'name', 'direction' => 'asc'],
+            ['field' => 'age',  'direction' => 'desc'],
+        ];
+        $stringArray = StringLiteralFormatter::formatArrayForGQLQuery($listOfObjects);
+        $this->assertEquals('[{ field: "name", direction: "asc" }, { field: "age", direction: "desc" }]', $stringArray);
+
+        // Nested lists inside a list must still serialize as arrays
+        $nestedList = [[1, 2], [3, 4]];
+        $stringArray = StringLiteralFormatter::formatArrayForGQLQuery($nestedList);
+        $this->assertEquals('[[1, 2], [3, 4]]', $stringArray);
+    }
+
+    /**
+     * @covers \GraphQL\Util\StringLiteralFormatter::formatObjectForGQLQuery
+     */
+    public function testFormatObjectForGQLQuery()
+    {
+        // Scalar values
+        $result = StringLiteralFormatter::formatObjectForGQLQuery(['field' => 'name', 'direction' => 'asc']);
+        $this->assertEquals('{ field: "name", direction: "asc" }', $result);
+
+        // Integer and bool values
+        $result = StringLiteralFormatter::formatObjectForGQLQuery(['limit' => 10, 'active' => true]);
+        $this->assertEquals('{ limit: 10, active: true }', $result);
+
+        // Nested associative array (object within object)
+        $result = StringLiteralFormatter::formatObjectForGQLQuery(['filter' => ['eq' => 'foo']]);
+        $this->assertEquals('{ filter: { eq: "foo" } }', $result);
+
+        // Nested list inside object
+        $result = StringLiteralFormatter::formatObjectForGQLQuery(['ids' => [1, 2, 3]]);
+        $this->assertEquals('{ ids: [1, 2, 3] }', $result);
     }
 
     /**

@@ -3,7 +3,7 @@
     "description": "GraphQL client and query builder.",
     "type": "library",
     "license": "MIT",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "keywords": [
         "graphql",
         "graph-ql",

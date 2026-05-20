@@ -512,6 +512,28 @@ Object(arg1: \"val1\" arg2: 2 arg3: true)
     }
 
     /**
+     * @depends clone testEmptyArguments
+     *
+     * @covers \GraphQL\Query::setArguments
+     * @covers \GraphQL\Query::constructArguments
+     *
+     * @param Query $query
+     */
+    public function testListOfInputObjectsArgumentValue(Query $query)
+    {
+        $query->setArguments(['orderBy' => [
+            ['field' => 'name',  'direction' => 'asc'],
+            ['field' => 'price', 'direction' => 'desc'],
+        ]]);
+        $this->assertEquals(
+            "query {
+Object(orderBy: [{ field: \"name\", direction: \"asc\" }, { field: \"price\", direction: \"desc\" }])
+}",
+            (string) $query
+        );
+    }
+
+    /**
      * @depends testStringArgumentValue
      *
      * @covers \GraphQL\Query::setArguments

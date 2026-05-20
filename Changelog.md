@@ -10,6 +10,10 @@ between each release.
 
 # Post-Fork Changelog
 
+## 2.0.3
+
+- Fix list-of-input-objects serialization: associative arrays nested inside a list argument now serialize as `[{key: value}]` instead of `[[value]]`. Adds `StringLiteralFormatter::formatObjectForGQLQuery()` and applies the same `array_is_list()` check inside `formatArrayForGQLQuery()` that 2.0.1 added at the top-level argument boundary.
+
 ## 2.0.2
 
 - Add `Enum::array()` helper for bulk construction of enums
